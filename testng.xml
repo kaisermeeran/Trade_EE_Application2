@@ -1,0 +1,19 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="SingleTestSuite">
+  <test name="RunSpecificTest">
+    <classes>
+      <class name="com.pomfiletest.Test_Login">
+        <methods>
+        	<include name="EE_login" />
+         	<include name="LoginTest" />
+       <!--   <include name="Homepage" />  
+         <include name="RegisterLC" />
+          <include name="IssueLC" />
+         <include name="Register_amendment" />
+          <include name="IssueamendLC" />-->
+          <include name="Register_document" />
+        </methods>
+      </class>
+    </classes>
+  </test>
+</suite>
