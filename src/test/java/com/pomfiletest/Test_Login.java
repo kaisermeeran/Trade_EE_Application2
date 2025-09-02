@@ -36,7 +36,7 @@ public class Test_Login {
 	WebDriver driver;
 	EE_Login login;
 	IPLC_Homepage homepage;
-	String refnum ="IP005247BEDV";
+	String refnum ="IP005214BEDV";
 	String appCustId;
 	String benCustId;
 	String advBankId;
@@ -402,6 +402,14 @@ public class Test_Login {
 		registerDocuObj.presentation_info(data);
 		registerDocuObj.presentation_info1(data);
 		registerDocuObj.getDocPresentedBy(data);
+		registerDocuObj.documents_info(data);
+		trnx_confirmed trnx = new trnx_confirmed(driver);
+		trnx.confirm();
+		
+		//IssueLC supervisor catalog and release
+		catalogobj.supervisorCatalog();
+		catalogobj.super_release(refnum);
+		
 	}
 
 }

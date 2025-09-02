@@ -13,6 +13,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
+import com.commonfile.parties_tab;
+
 public class RegisterDocument {
 	
 	WebDriver driver;
@@ -34,6 +36,11 @@ public class RegisterDocument {
 	@FindBy(id="PRES_BK_REF")WebElement presenter_ref;
 	@FindBy(id="B") WebElement partiestab;
 	@FindBy(id="DOC_PRES_BY") WebElement Docpresentedby;
+	@FindBy(id="C") WebElement documentstab;
+	@FindBy(id="DRAFT_1") WebElement draft_original;
+	@FindBy(id="DRAFT_2") WebElement draft_copy;
+	@FindBy(id="INVOICE_1") WebElement invoice_original;
+	@FindBy(id="INVOICE_2") WebElement invoice_copy;
 	
 	
 	
@@ -41,7 +48,7 @@ public class RegisterDocument {
 	{
 		Thread.sleep(2000); // Adding a sleep to ensure the page is fully loaded before clicking
 		iplcHomepage = new IPLC_Homepage(driver);
-		iplcHomepage.clickImportLC();             //----Click on Import LC --  Should be comment when running the entire suite
+		//iplcHomepage.clickImportLC();             //----Click on Import LC --  Should be comment when running the entire suite
 		iplcPresentation.click();
 		registerDocumentLC.click();
 	}
@@ -53,10 +60,17 @@ public class RegisterDocument {
 		//presentation_info1(data);
 	}
 	
-	public void getDocPresentedBy(Map<String, String> data)
+	public void getDocPresentedBy(Map<String, String> data) throws InterruptedException
 	{
 		parties_info(data.get("DOC_PRESENTED_BY"));
 	}
+	
+	public void documents_info(Map<String, String> data)
+	{
+		Documents(data.get("DRF_ORIGINAL"),data.get("DRF_COPY "),data.get("INV_ORIGINAL"),data.get("INV_COPY"),data.get("BL/AWB_ORIGINAL"),data.get("BL/AWB_COPY"));
+	}
+	
+
 	
 	public void presentation_info1(Map<String, String> data) {
 	    // Get multiple values for DRF_ORIGINAL
@@ -75,12 +89,15 @@ public class RegisterDocument {
 	{
 		System.out.println("Presentation amt is :" +peramt);
 		System.out.println("Presentation ref is: " +preref);
-		System.out.println("Presentation draft Original : " +drforg);
-		System.out.println("Presentation draft Copy : " +drfcpy);
-		System.out.println("Presentation Invoice Original : " +invorg);
-		System.out.println("Presentation Invoice copy : " +invcpy);
-		System.out.println("Presentation BL/ABW Original : " +BLorg);
-		System.out.println("Presentation BL/ABW Copy : " +BLcpy);
+		
+		/*
+		 * System.out.println("Presentation draft Original : " +drforg);
+		 * System.out.println("Presentation draft Copy : " +drfcpy);
+		 * System.out.println("Presentation Invoice Original : " +invorg);
+		 * System.out.println("Presentation Invoice copy : " +invcpy);
+		 * System.out.println("Presentation BL/ABW Original : " +BLorg);
+		 * System.out.println("Presentation BL/ABW Copy : " +BLcpy);
+		 */
 		
 		presentation_amt.sendKeys(peramt);
 		
@@ -97,15 +114,39 @@ public class RegisterDocument {
 		presenter_ref.sendKeys(preref);
 	}
 	
-	public void parties_info(String docpresentby)
+	public void parties_info(String docpresentby) throws InterruptedException
 	{
 		partiestab.click();
 		Select dropdown = new Select(Docpresentedby);
 		dropdown.selectByVisibleText(docpresentby);
 		String selectedOption = dropdown.getFirstSelectedOption().getText();
 		System.out.println("Selected Document Presented By: " + selectedOption);
+		String presenterid= driver.findElement(By.id("PRES_BK_ID")).getAttribute("value");
+		if(presenterid.isEmpty())
+		{
+			System.out.println("Presenter ID is not populated");
+			parties_tab partiesobj = new parties_tab(driver);
+			driver.findElement(By.id("PRES_BK_ID_BTN")).click();
+			partiesobj.enterAppCustId("HBZUAEADXXX");	//Hot coded, value passed 
+		}
+		else
+		{
+			System.out.println("Presenter ID is populated: " + presenterid);
+		}
 	}
 	
-	
-
+	public void Documents( String drforg, String drfcpy, String invorg, String invcpy, String BLorg, String BLcpy)
+	{
+		System.out.println("Presentation draft Original : " +drforg);
+		System.out.println("Presentation draft Copy : " +drfcpy);
+		System.out.println("Presentation Invoice Original : " +invorg);
+		System.out.println("Presentation Invoice copy : " +invcpy);
+		System.out.println("Presentation BL/ABW Original : " +BLorg);
+		System.out.println("Presentation BL/ABW Copy : " +BLcpy);
+		documentstab.click();
+		draft_original.sendKeys(drforg);
+		draft_copy.sendKeys(drfcpy);
+		invoice_original.sendKeys(invorg);
+		invoice_copy.sendKeys(invcpy);
+	}
 }
