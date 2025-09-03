@@ -23,6 +23,7 @@ import com.commonfile.charges_tab;
 import com.commonfile.parties_tab;
 import com.commonfile.trnx_confirmed;
 import com.pomtestcases.Beneficiary_Response;
+import com.pomtestcases.Checkdocument;
 import com.pomtestcases.EE_Login;
 import com.pomtestcases.IPLC_Homepage;
 import com.pomtestcases.IPLC_RegisterAmendmentLC;
@@ -36,7 +37,7 @@ public class Test_Login {
 	WebDriver driver;
 	EE_Login login;
 	IPLC_Homepage homepage;
-	String refnum ="IP005214BEDV";
+	String refnum ="IP005154BEDV";
 	String appCustId;
 	String benCustId;
 	String advBankId;
@@ -409,6 +410,15 @@ public class Test_Login {
 		//IssueLC supervisor catalog and release
 		catalogobj.supervisorCatalog();
 		catalogobj.super_release(refnum);
+		
+	}
+	@Test(priority = 8)
+	public void Check_document() throws InterruptedException
+	{
+		Checkdocument checkdocobj = new Checkdocument(driver);
+		checkdocobj.ClickCheckDocumentLC();
+		Catalog catalogobj = new Catalog(driver);
+		catalogobj.commoncatalog(refnum);
 		
 	}
 
