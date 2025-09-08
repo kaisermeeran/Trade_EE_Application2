@@ -70,8 +70,6 @@ public class RegisterDocument {
 		Documents(data.get("DRF_ORIGINAL"),data.get("DRF_COPY "),data.get("INV_ORIGINAL"),data.get("INV_COPY"),data.get("BL/AWB_ORIGINAL"),data.get("BL/AWB_COPY"));
 	}
 	
-
-	
 	public void presentation_info1(Map<String, String> data) {
 	    // Get multiple values for DRF_ORIGINAL
 	    List<String> drfOriginalValues = List.of(data.get("DRF_ORIGINAL").split(","));

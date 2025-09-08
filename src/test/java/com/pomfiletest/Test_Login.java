@@ -37,13 +37,14 @@ public class Test_Login {
 	WebDriver driver;
 	EE_Login login;
 	IPLC_Homepage homepage;
-	String refnum ="IP005154BEDV";
+	String refnum ="IP005335BEDV";
 	String appCustId;
 	String benCustId;
 	String advBankId;
 	String chargesTab;
 	String chargesaccno;
 	String detrimental;
+	String checkdoc;
 	
 	
 	
@@ -412,14 +413,37 @@ public class Test_Login {
 		catalogobj.super_release(refnum);
 		
 	}
-	@Test(priority = 8)
-	public void Check_document() throws InterruptedException
+	@Test(priority = 8, dataProvider = "RegisterDoc")
+	public void Check_document(Map<String, String> data) throws InterruptedException
 	{
 		Checkdocument checkdocobj = new Checkdocument(driver);
 		checkdocobj.ClickCheckDocumentLC();
 		Catalog catalogobj = new Catalog(driver);
 		catalogobj.commoncatalog(refnum);
+		checkdoc = checkdocobj.Document_Status(data);
+		System.out.println("Document Status is: " + checkdoc);
+		checkdocobj.validate_presentationamt();
 		
+		trnx_confirmed trnx = new trnx_confirmed(driver);
+		trnx.confirm();
+		
+		//IssueLC supervisor catalog and release
+		catalogobj.supervisorCatalog();
+		catalogobj.super_release(refnum);
+	}
+	
+	
+	@Test(priority = 9)
+	public void discrepancy_found()
+	{
+		if(checkdoc.equalsIgnoreCase("Discrepancy Found"))
+		{
+			System.out.println("Discrepancy Found in Document Check, further actions required.");
+		} 
+		else 
+		{
+			System.out.println("No Discrepancy Found in Document Check, no further actions required.");
+		}
 	}
 
 }

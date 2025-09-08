@@ -10,8 +10,10 @@
          <include name="RegisterLC" />
           <include name="IssueLC" />
          <include name="Register_amendment" />
-          <include name="IssueamendLC" />-->
-          <include name="Register_document" />
+          <include name="IssueamendLC" />
+          <include name="Register_document" />-->
+          <include name="Check_document" />
+          <include name="discrepancy_found" />
         </methods>
       </class>
     </classes>
