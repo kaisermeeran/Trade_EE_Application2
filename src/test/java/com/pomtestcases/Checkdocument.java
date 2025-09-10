@@ -30,8 +30,8 @@ public class Checkdocument {
 	{
 		Thread.sleep(2000); // Adding a sleep to ensure the page is fully loaded before clicking
 		iplcHomepage = new IPLC_Homepage(driver);
-		iplcHomepage.clickImportLC();   //----Click on Import LC --  Should be comment when running the entire suite
-		iplcPresentation.click(); 		//----Click on iplcPresentation --  Should be comment when running the entire suite
+		//iplcHomepage.clickImportLC();   //----Click on Import LC --  Should be comment when running the entire suite
+		//iplcPresentation.click(); 		//----Click on iplcPresentation --  Should be comment when running the entire suite
 		checkDocumentLC.click();
 	}
 	

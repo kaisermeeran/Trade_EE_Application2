@@ -447,27 +447,4 @@ public class Test_Login {
 	}
 
 }
-
-
-
-
-
-
-
-
-//registerLC.enterAppCustId(appCustId);
-//registerLC.enterAppCustId(benCustId);
-
-/*
- * String formOfLC = excelutils.getCellData(filepath, "RegisterLC", i, 0); 
- * String aplbRules = excelutils.getCellData(filepath, "RegisterLC", i, 1);
- * String avalBy = excelutils.getCellData(filepath, "RegisterLC", i, 2); String
- * lcAmt = excelutils.getCellData(filepath, "RegisterLC", i, 3); String
- * expiryDate = excelutils.getCellData(filepath, "RegisterLC", i, 4); String
- * addAmtCovered = excelutils.getCellData(filepath, "RegisterLC", i, 5);
- */
-
-//registerLC.clickchargestab();
-//registerLC.clickchargesAccbutton();
-
  		
