@@ -24,6 +24,7 @@ import com.commonfile.parties_tab;
 import com.commonfile.trnx_confirmed;
 import com.pomtestcases.Beneficiary_Response;
 import com.pomtestcases.Checkdocument;
+import com.pomtestcases.Descrepancy_Document;
 import com.pomtestcases.EE_Login;
 import com.pomtestcases.IPLC_Homepage;
 import com.pomtestcases.IPLC_RegisterAmendmentLC;
@@ -31,20 +32,21 @@ import com.pomtestcases.IssueLetterofCredit;
 import com.pomtestcases.IssueamendmentLC;
 import com.pomtestcases.RegisterDocument;
 import com.pomtestcases.RegisterLC;
+import com.pomtestcases.Settlement;
 import com.utilitypackage.*;
 public class Test_Login {
 	
 	WebDriver driver;
 	EE_Login login;
 	IPLC_Homepage homepage;
-	String refnum ="IP005335BEDV";
+	String refnum ="IP004066BEDV";
 	String appCustId;
 	String benCustId;
 	String advBankId;
 	String chargesTab;
 	String chargesaccno;
 	String detrimental;
-	String checkdoc;
+	String checkdoc = "Compliant";
 	
 	
 	
@@ -433,16 +435,40 @@ public class Test_Login {
 	}
 	
 	
-	@Test(priority = 9)
-	public void discrepancy_found()
+	
+	@DataProvider(name = "settlemnt")
+    public Object[][] settlemnt() throws Exception {
+		String filepath = System.getProperty("user.dir") + "\\Data\\Testdata.xlsx";
+	    String sheetName = "Settlement"; // <--- Make sure this is the correct sheet name
+
+	    Map<String, String> data = excelutils.getLoginData(filepath, sheetName);
+
+	    return new Object[][] { { data } };
+    }
+	
+	
+	
+	@Test(priority = 9, dataProvider = "settlemnt")
+	public void discrepancy_found(Map<String, String> data) throws InterruptedException
 	{
 		if(checkdoc.equalsIgnoreCase("Discrepancy Found"))
 		{
 			System.out.println("Discrepancy Found in Document Check, further actions required.");
+			Descrepancy_Document descrepancyobj = new Descrepancy_Document(driver);
+			descrepancyobj.Clickdescrepancies();
+			Catalog catalogobj = new Catalog(driver);
+			catalogobj.commoncatalog(refnum);
+			
 		} 
 		else 
 		{
 			System.out.println("No Discrepancy Found in Document Check, no further actions required.");
+			Settlement settobj = new Settlement(driver);
+			settobj.ClickSettlement();
+			Catalog catalogobj = new Catalog(driver);
+			catalogobj.commoncatalog(refnum);
+			settobj.get_prsentationInfo(data);
+			settobj.avalBy();
 		}
 	}
 

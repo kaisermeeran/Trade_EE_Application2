@@ -15,7 +15,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.pomtestcases.RegisterLC;
 
-public class charges_tab {
+public class charges_tab 
+{
 	
 	@FindBy(id="F") WebElement chargestab;
 	@FindBy(id="CHG_FLD_ALL_CHARGE_AT") WebElement paidAt;
@@ -24,6 +25,9 @@ public class charges_tab {
 	@FindBy(id="CHG_FLD_LOCAL_CUST_AC_NO") WebElement chargesAccNoField;
 	@FindBy(id="ASSET_ACNO") WebElement custaccno; // Assuming this is the field for asset account number
 	@FindBy(id="LIAB_ACNO") WebElement liabaccno; // Assuming this is the field for liability account number
+	
+	@FindBy(xpath="//*[@id=\"do_PaymentDebit\"]/table/tbody/tr[6]/td[4]/input[1]") WebElement debitchargesAcctxtbox;
+	@FindBy(xpath="//*[@id=\"do_PaymentCredit_M\"]/table/tbody/tr[3]/td[4]/input[1]") WebElement creditchargesAcctxtbox;
 
 	// Reference to RegisterLC for iframe handling
 	
@@ -166,23 +170,88 @@ public class charges_tab {
 				}
 		}
 	
-		}}
+		}
 	  
 	  
+	  //Settlement and Payment Debit/Credit
 	  
-	  //Not for Changres tab, but for iframe handling
-	  /*public void findiframe()
-	  {
-		  List<WebElement> allIframes = driver.findElements(By.tagName("iframe"));
-		  System.out.println("Total number of iframes on the page: " + allIframes.size());
+	  public void enterChargesAccNo(String cubkId, WebElement chargesAcctxtbox) {
+		    System.out.println("Entering Charges Acc number: " + cubkId);
+		    reglc.switchToDefaultContent();
+		    WebDriverWait wait1 = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-		  for (int i = 0; i < allIframes.size(); i++) {
-		      String nameOrId = allIframes.get(i).getAttribute("name");
-		      if (nameOrId == null || nameOrId.isEmpty()) {
-		          nameOrId = allIframes.get(i).getAttribute("id");
-		      }
-		      System.out.println("Iframe " + i + ": " + nameOrId);
-		  }
-	  }*/
+		    WebElement iframeElement = wait1.until(
+		        ExpectedConditions.presenceOfElementLocated(
+		            By.xpath("//iframe[contains(@id,'confirmDialogFrame')]")
+		        )
+		    );
+
+		    try {
+		        // 🔹 Try to select from popup table
+		        driver.switchTo().frame(iframeElement);
+		        List<WebElement> rows = table.findElements(By.tagName("tr"));
+		        boolean found = false;
+
+		        for (WebElement row : rows) {
+		            try {
+		                WebElement firstCellLink = row.findElement(By.xpath("./td[1]/a"));
+		                String refValue = firstCellLink.getText().trim();
+		                System.out.println("Row REF: " + refValue);
+
+		                if (refValue.equals(cubkId)) {
+		                    firstCellLink.click();
+		                    System.out.println("✅ Clicked: " + refValue);
+		                    found = true;
+		                    break;
+		                }
+		            } catch (Exception ignore) {
+		                // Some rows might not have <td[1]/a>, skip safely
+		            }
+		        }
+
+		        if (!found) {
+		            throw new RuntimeException("❌ Reference not found: " + cubkId);
+		        }
+
+		    } catch (Exception e) {
+		        // 🔹 Popup not found → fallback to textboxes
+		        reglc.switchToDefaultContent();
+		        driver.findElement(By.cssSelector("svg.MuiSvgIcon-root[title='cancel']")).click();
+		        reglc.switchToWorkFrame();
+
+		        try {
+		            WebElement cust = wait1.until(ExpectedConditions.visibilityOf(custaccno));
+		            String currentValue = cust.getAttribute("value");
+
+		            if (currentValue == null || currentValue.isEmpty()) {
+		                cust.sendKeys(cubkId);
+		            } else {
+		                wait1.until(ExpectedConditions.visibilityOf(liabaccno)).isDisplayed();
+		                liabaccno.sendKeys(cubkId);
+		            }
+
+		        } catch (org.openqa.selenium.TimeoutException e1) {
+		            try {
+		                WebElement chargesAccNoField = wait1.until(
+		                    ExpectedConditions.visibilityOf(chargesAcctxtbox)
+		                );
+		                chargesAccNoField.sendKeys(cubkId);
+
+		            } catch (Exception e2) {
+		                System.err.println("❌ Unable to enter account number: " + e2.getMessage());
+		                throw new RuntimeException("Failed to enter account number in either field.");
+		            }
+		        }
+		    }
+
+		    reglc.switchToDefaultContent();
+		    reglc.switchToWorkFrame();
+		}
+
+}
+	  
+	  
+	  
+	  
 
 
