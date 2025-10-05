@@ -52,11 +52,13 @@ public class Settlement {
 	@FindBy(xpath="//*[@id=\"do_PaymentDebit\"]/table/tbody/tr[6]/td[4]/input[1]") WebElement debitchargesAcctxtbox;
 	@FindBy(xpath="//*[@id=\"do_PaymentCredit_M\"]/table/tbody/tr[3]/td[4]/input[1]") WebElement creditchargesAcctxtbox;
 	
+	@FindBy(id="G") WebElement chargestab;
+	
 	public void ClickSettlement() throws InterruptedException 
 	{
 		Thread.sleep(2000); // Adding a sleep to ensure the page is fully loaded before clicking
 		iplcHomepage = new IPLC_Homepage(driver);
-		iplcHomepage.clickImportLC();   //----Click on Import LC --  Should be comment when running the entire suite
+		//iplcHomepage.clickImportLC();   //----Click on Import LC --  Should be comment when running the entire suite
 		Settlement.click();
 		Actions actions = new Actions(driver);
 		actions.sendKeys(Keys.PAGE_DOWN).perform();
@@ -186,5 +188,11 @@ public class Settlement {
 		
 	}
 	
+	public void chargestab(Map<String, String> data) throws InterruptedException
+	{
+		chargestab.click();
+		charges_tab charges = new charges_tab(driver);
+		charges.PaidatFieldVisible(data.get("PAID_AT"), data.get("CHARGES_ACC"));
+	}
 
 }

@@ -62,6 +62,10 @@ public class IssueLetterofCredit {
 	@FindBy(id="PaymentTerms_SAVE") WebElement  mixpaysavebutton;
 	@FindBy(id="H") WebElement Chargestab;
 	
+	//Available by PAYMENT 
+	@FindBy(id="DRW_ID_BTN") WebElement draweeIdButton;
+	@FindBy(id="DRWE_ID") WebElement draweeIdTextBox;
+	
 	
 	public void doLogin(Map<String, String> data) throws InterruptedException 
 	{
@@ -84,15 +88,15 @@ public class IssueLetterofCredit {
 		
 	}
 	
-	public void tenortabdetails(Map<String, String> data) 
+	public void tenortabdetails(Map<String, String> data) throws InterruptedException 
 	{
 		
 		
 		checktenordetails(data.get("AVAL_BY"), data.get("TENOR_DAY"),data.get("TENOR_DESC"),
 				data.get("MIX_PAY_DETAILS"),data.get("PERCEN"),data.get("MIX_TENOR_DAYS"),
-				data.get("MIX_TENOR_TYP"));
+				data.get("MIX_TENOR_TYP"), data.get("DRAWEE_ID"));
 		 }
-		//data.get("MIX_PAY_DETAILS")
+		
 		
 	
 	
@@ -248,12 +252,17 @@ public class IssueLetterofCredit {
 	    tenortab.click();
 	}
 	
-	public void checktenordetails(String aval, String tenorDay, String tenorDesc, String Mixeddetails, String percval, String mixedtendays, String mixedtentyp)
+	public void checktenordetails(String aval, String tenorDay, String tenorDesc, String Mixeddetails, String percval, String mixedtendays, String mixedtentyp, String draweeid) throws InterruptedException
 	{
 		if(aval.equals("By Payment")) 
 		{
 		Select avalSelect = new Select(avalBy);
 		avalSelect.selectByVisibleText(aval);
+		draweeIdButton.click();
+		RegisterLC reglcobj = new RegisterLC(driver);
+		reglcobj.handle_alert();
+		parties_tab partiesobj = new parties_tab(driver);
+		partiesobj.enterAppCustId(draweeid);
 		}
 		else if(aval.equals("By Acceptance")) 
 		{

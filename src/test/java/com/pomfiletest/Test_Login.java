@@ -469,6 +469,14 @@ public class Test_Login {
 			catalogobj.commoncatalog(refnum);
 			settobj.get_prsentationInfo(data);
 			settobj.avalBy();
+			settobj.chargestab(data);
+			
+			trnx_confirmed trnx = new trnx_confirmed(driver);
+			trnx.confirm();
+			
+			//IssueLC supervisor catalog and release
+			catalogobj.supervisorCatalog();
+			catalogobj.super_release(refnum);
 		}
 	}
 
